@@ -1,0 +1,396 @@
+{
+	"info": {
+		"_postman_id": "c2dcdd7c-82c7-4721-92d3-3b286676a9d2",
+		"name": "simple_book",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22445973",
+		"_collection_link": "https://red-satellite-775651.postman.co/workspace/my-workspace~3aa466cf-dd92-476a-a836-d9265abeb53b/collection/22445973-c2dcdd7c-82c7-4721-92d3-3b286676a9d2?action=share&source=collection_link&creator=22445973"
+	},
+	"item": [
+		{
+			"name": "post",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"clientName\" : \"shraddha\",\r\n    \"clientEmail\" : \"shraddha12@gamil.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api-clients",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api-clients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('verify status code',()=>\r",
+							"{\r",
+							"    pm.response.to.have.status(200);\r",
+							"}\r",
+							")"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/status",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"check status code\",()=>\r",
+							"{\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([201,202]);\r",
+							"}\r",
+							")"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/books",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_single_book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('check status code',()=>\r",
+							"{\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,201,202])\r",
+							"});\r",
+							"\r",
+							"pm.test(\"check resopnce time\",()=>\r",
+							"{\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000)\r",
+							"});\r",
+							"\r",
+							"const jasonData= pm.response.json();\r",
+							"pm.test('check data',()=>\r",
+							"{\r",
+							"    pm.expect(jasonData.name).to.be.eql(\"The Russian\");\r",
+							"    pm.expect(jasonData.id).to.be.eql(1);\r",
+							"    pm.expect(jasonData.type).to.be.eql(\"fiction\");\r",
+							"    pm.expect(jasonData.author).to.be.eql(\"James Patterson and James O. Born\");\r",
+							"    pm.expect(jasonData.isbn).to.be.eql(\"1780899475\");\r",
+							"    pm.expect(jasonData.price).to.be.eql(12.98);\r",
+							"    pm.expect(jasonData.available).to.be.eql( true);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"check cookies\",()=>\r",
+							"{\r",
+							"    pm.expect(pm.cookies.has('language')).to.be.false\r",
+							"});\r",
+							"\r",
+							"var schema={\r",
+							"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"id\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    },\r",
+							"    \"name\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"author\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"isbn\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"type\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"price\": {\r",
+							"      \"type\": \"number\"\r",
+							"    },\r",
+							"    \"current-stock\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    },\r",
+							"    \"available\": {\r",
+							"      \"type\": \"boolean\"\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"id\",\r",
+							"    \"name\",\r",
+							"    \"author\",\r",
+							"    \"isbn\",\r",
+							"    \"type\",\r",
+							"    \"price\",\r",
+							"    \"current-stock\",\r",
+							"    \"available\"\r",
+							"  ]\r",
+							"}\r",
+							"pm.test(\"schema validation\",()=>\r",
+							"{\r",
+							"    pm.expect(tv4.validate(jasonData,schema)).to.be.true;\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/books/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "buy_book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jasondata=pm.response.json();\r",
+							"const id=jasondata.orderId;\r",
+							"pm.environment.set(\"orderid\",id);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"bookId\": 1,\r\n    \"customerName\":\"shraddha\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/orders",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_orders",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/orders",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_single_order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"check customer info\",()=>\r",
+							"{\r",
+							"    var jasonData=pm.response.json();\r",
+							"\r",
+							"    pm.expect(jasonData.customerName).to.eql(\"shraddha\");\r",
+							"    pm.expect(jasonData.bookId).to.eql(1);\r",
+							"    pm.expect(jasonData.quantity).to.eql(1);\r",
+							"\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/orders/{{orderid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"orders",
+						"{{orderid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update_order",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customerName\": \"Shraddha\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/orders/{{orderid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"orders",
+						"{{orderid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete_order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.unset(\"orderid\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/orders/{{orderid}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"orders",
+						"{{orderid}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "87dcee032b80216fd30bd35b4c1edcd17c59df11680d983526a7c9631075a1e1",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": " https://simple-books-api.glitch.me",
+			"type": "string"
+		}
+	]
+}
